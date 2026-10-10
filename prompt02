@@ -1,0 +1,231 @@
+Defining the Specialized Sub-Agents [Prompt02]
+Implement Agentwork Workflow logic within compliance_agent. Agent Workflow logic is mentioned below
+Create Bigquery and GCS tools within compliancel_agent.
+Grounding: Troubleshooting_pca_continuous_monitoring.pdf should be copied to gs://impact_compliance-1 and used for grounding some of the information
+BigQuery dataset:Project ID: customers-444618 BIGQUERY_DATASET_ID="compliance_agent" most of tables have suffix _20251106 below queries not added suffix. Please make sure to add suffixes wherever required.
+Model Selection: gemini-3.6-flash
+
+Agent Workflow:
+Step0: Input: publisher_ID (e.g., 4381629). Optionally, a JIRA_ticket_ID (e.g., IRFRAUD-8254) can be used for context in the final summary.
+
+
+Step 1: Identify Linked Accounts
+Action: Execute the BigQuery query to find all accounts within the same graph_id as the input publisher_ID.
+Query:
+WITH graph AS (
+  SELECT graph_id
+  FROM customers-444618.compliance_agent.account_graph_main_20251106
+  WHERE account_id = 2020202
+)
+SELECT DISTINCT ag.Account_id
+FROM customers-444618.compliance_agent.account_graph_main_20251106 ag
+JOIN graph g ON ag.graph_id = g.graph_id;
+Output: A list of unique account_ids, referred to as account_list.
+Step 2-4: Parallel Data Extraction for all accounts in account_list
+The agent will execute the queries from Steps 2, 3, and 4 in parallel for all IDs in account_list.
+
+Step 2: Get Publisher Summary & Top Programs
+Query 2.1 (Publisher Details):
+SELECT publisher_id, publisher_name, publisher_description, primary_promo_method, company_url, country, account_status, account_creation_date, marketplace_status, marketplace_approval_date, publisher_rating, is_qualified_to_pay, lifetime_gtv, last_30_day_day_gtv, Top1_ref_domain, partnership_count
+FROM `customers-444618.compliance_agent.publisher`
+WHERE publisher_id IN UNNEST(@account_list);
+Query 2.2 (Top Programs):
+WITH raw AS (
+  SELECT publisher_id, program_name, lifetime_gtv,
+  ROW_NUMBER() OVER (PARTITION BY publisher_id ORDER BY lifetime_gtv DESC) AS gtv_rank
+  FROM `customers-444618.compliance_agent.partnership_affiliation`
+  WHERE publisher_id IN UNNEST(@account_list)
+)
+SELECT publisher_id, STRING_AGG(program_name ORDER BY gtv_rank LIMIT 10) as top_programs
+FROM raw
+WHERE gtv_rank <= 10
+GROUP BY 1;
+
+Step 3: Marketplace Approval History
+Query 3:
+SELECT publisher_id, request_context__title as publisher_name, TIMESTAMP(application_evaluation_date) as application_date, result_state as evaluation,
+       TRIM(CONCAT(
+         IF(evaluations__profanity_check__result = "FAILED", "profanity,", ""),
+         IF(evaluations__duplicate_device_id__result = "FAILED", "duplicate_device,", ""),
+         IF(evaluations__unique_media_properties__result = "FAILED", "non_unique_media_property,", ""),
+         IF(evaluations__email_domain__result = "FAILED", "high_risk_email_domain,", ""),
+         IF(evaluations__email_risk__result = "FAILED", "high_risk_email,", ""),
+         IF(evaluations__ip_risk__result = "FAILED", "high_risk_ip,", ""),
+         IF(evaluations__url_risk__result = "FAILED", "high_risk_url,", ""),
+         IF(evaluations__geo_risk__result = "FAILED", "high_risk_geo,", ""),
+         IF(evaluations__fake_audience__result = "FAILED", "fake_audience,", ""),
+         IF(evaluations__offensive_text__result = "FAILED", "offensive_text,", ""),
+         IF(evaluations__offensive_image__result = "FAILED", "offensive_image", "")
+       ), ',') as decline_reasons
+FROM `customers-444618.compliance_agent.rtas_results`
+WHERE publisher_id IN UNNEST(@account_list)
+UNION ALL
+SELECT id as publisher_id, organizationname as publisher_name, TIMESTAMP(platform_application_date) as application_date, prediction as evaluation, decline_reasons
+FROM `customers-444618.compliance_agent.iram_application_scored`
+WHERE id IN UNNEST(@account_list);
+
+Step 4: Compliance History (JIRA)
+Query 4:
+SELECT r.issue_id, r.partner_id, r.created_date, r.summary, r.description, r.status, c.status_changed, c.author as commenter, c.body as comment, c.created as comment_created
+FROM `customers-444618.compliance_agent.raw_data` r
+LEFT JOIN `customers-444618.compliance_agent.comments` c ON r.issue_id = c.issue
+WHERE EXISTS (
+  SELECT 1
+  FROM UNNEST(SPLIT(r.partner_id, " ")) pid
+  WHERE SAFE_CAST(REGEXP_EXTRACT(pid, "[0-9]+") AS INT64) IN UNNEST(@account_list)
+);
+
+Step 5: Initial Publisher Risk Analysis (7, 30, 365-day intervals)
+Action: Execute the provided query three times, substituting @date_interval with 7, 30, and 365. These can be run in parallel.
+Query 5 (Template):
+SELECT publisher_id, publisher_name, IF(publisher_id = @publisher_ID, 1, 0) as primary,
+       AVG(Actions_7days) as avg_weekly_actions, AVG(Clicks_7days) as avg_weekly_clicks, AVG(Commissions_7days) as avg_weekly_commissions,
+       SAFE_DIVIDE(SUM(Long_cta_pct * actions_7days), SUM(actions_7days)) as long_cta_pct,
+       SAFE_DIVIDE(SUM(Injected_click_pct * actions_7days), SUM(actions_7days)) as Injected_click_pct,
+       SAFE_DIVIDE(SUM(Click_spamming_pct * actions_7days), SUM(actions_7days)) as Click_spamming_pct,
+       SAFE_DIVIDE(SUM(Cs_clicks_pct * clicks_7days ), SUM(clicks_7days)) as cs_clicks_pct,
+       SAFE_DIVIDE(SUM(Cs_actions_pct * actions_7days ), SUM(actions_7days)) as cs_actions_pct,
+       SAFE_DIVIDE(SUM(Rejection_rate_7days * actions_7days ), SUM(actions_7days)) as Rejection_rate_7days,
+       SAFE_DIVIDE(SUM(High_risk_url_action_pct * actions_7days ), SUM(actions_7days)) as High_risk_url_action_pct,
+       SAFE_DIVIDE(SUM(Geo_mismatch_pct * actions_7days ), SUM(actions_7days)) as Geo_mismatch_pct,
+       SAFE_DIVIDE(SUM(High_risk_login_ip_pct * total_logins_7day ), SUM(total_logins_7day)) as High_risk_login_ip_pct,
+       SAFE_DIVIDE(SUM(High_risk_login_email_pct * total_logins_7day ), SUM(total_logins_7day)) as High_risk_login_email_pct,
+       SAFE_DIVIDE(SUM(Abnormal_peak_actions_pct * actions_7days ), SUM(actions_7days)) as Abnormal_peak_actions_pct,
+       SAFE_DIVIDE(SUM(Abnormal_peak_clicks_pct * clicks_7days ), SUM(clicks_7days)) as Abnormal_peak_clicks_pct,
+       SAFE_DIVIDE(SUM(Prop_actions_outside * actions_7days ), SUM(actions_7days)) as Prop_actions_outside,
+       SAFE_DIVIDE(SUM(Prop_clicks_outside * clicks_7days ), SUM(clicks_7days)) as Prop_clicks_outside,
+       SAFE_DIVIDE(SUM(Prop_actions_no_refurl * actions_7days ), SUM(actions_7days)) as Prop_actions_no_refurl,
+       AVG(User_entropy_risk) as avg_user_entropy,
+       SAFE_DIVIDE(SUM(Rc_proxy_risk * clicks_7days), SUM(clicks_7days)) as Rc_proxy_risk,
+       SAFE_DIVIDE(SUM(Rc_ip_reputation_risk * clicks_7days), SUM(clicks_7days)) as Rc_ip_reputation_risk,
+       SAFE_DIVIDE(SUM(Rc_domain_reputation_risk  * clicks_7days), SUM(clicks_7days)) as Rc_domain_reputation_risk ,
+       AVG(Final_score) as avg_final_score,
+       SAFE_DIVIDE(COUNTIF(risk_level = "critical"), COUNT(*)) as critical_flagged_pct,
+       SAFE_DIVIDE(COUNTIF(risk_level = "elevated"), COUNT(*)) as elevated_flagged_pct,
+       SAFE_DIVIDE(COUNTIF(risk_level = "mild"), COUNT(*)) as mild_flagged_pct
+FROM customers-444618.compliance_agent.partner_continuous_monitoring_final_scores
+WHERE DATE(data_date) >= CURRENT_DATE() - INTERVAL @date_interval DAY
+  AND publisher_id IN UNNEST(@account_list)
+GROUP BY 1, 2, 3;
+
+
+Step 6: Conditional Detailed Publisher Risk Analysis
+Action: Based on the 30-day interval results from Step 5, trigger the following queries. The {interval} or {date_interval} in these queries should be 30 days.
+6A: For each account_id where long_cta_pct > 0.1 OR Injected_click_pct > 0.1 OR Click_spamming_pct > 0.1:
+
+SELECT publisher_id, campaign_id,
+       SAFE_DIVIDE(SUM(actions), SUM(clicks)) as conversion_rate,
+       SAFE_DIVIDE(SUM(Avg_cta * actions), SUM(actions)) as avg_cta,
+       SAFE_DIVIDE(SUM(Perc_actions_lt_30sec * actions), SUM(actions)) as Perc_actions_lt_30sec
+FROM `customers-444618.compliance_agent.attribution_risk_monitoring_new`
+WHERE DATE(data_date) >= CURRENT_DATE() - INTERVAL 30 DAY
+  AND publisher_id = @current_account_id
+GROUP BY 1, 2;
+
+6B: For account_ids where High_risk_url_action_pct > 0.1:
+
+SELECT publisher_id, domain, SUM(num_actions) as num_actions,
+       SUM(IF(rc_url_abnormal_bounce_rate OR rc_url_abnormal_traffic_source OR rc_url_copied_content OR rc_url_low_visit OR rc_url_low_visit_duration OR rc_url_low_word_count, 1, 0) * num_actions) as flagged_actions,
+       SUM(IF(rc_url_abnormal_bounce_rate, 1, 0) * num_actions) as rc_url_abnormal_bounce_rate,
+       SUM(IF(rc_url_abnormal_traffic_source, 1, 0) * num_actions) as rc_url_abnormal_traffic_source,
+       SUM(IF(rc_url_copied_content, 1, 0) * num_actions) as rc_url_copied_content ,
+       SUM(IF(rc_url_low_visit, 1, 0) * num_actions) as rc_url_low_visit,
+       SUM(IF(rc_url_low_visit_duration, 1, 0) * num_actions) as rc_url_low_visit_duration,
+       SUM(IF(rc_url_low_word_count, 1, 0) * num_actions) as rc_url_low_word_count
+FROM `customers-444618.compliance_agent.url_risk_monitoring`
+WHERE DATE(data_date) >= CURRENT_DATE() - INTERVAL 30 DAY -- Increased from 1 DAY for more context
+  AND publisher_id IN UNNEST(@high_risk_url_accounts)
+GROUP BY 1, 2
+ORDER BY flagged_actions DESC;
+
+6B1: If 6B returns domains with flagged_actions > 0:
+
+SELECT url, traffic_summary_visits, traffic_summary_bounce_rate, traffic_summary_desktop_bounce_rate, traffic_summary_time_on_site, traffic_summary_paid, traffic_summary_referral, traffic_summary_social_paid, traffic_summary_direct, traffic_summary_display_ad, traffic_summary_mail, traffic_summary_search, traffic_summary_social_organic, cs_num_words, cs_best_matched_url, cs_best_matched_pct
+FROM `customers-444618.compliance_agent.intelligence_semrush_operator_only`
+FULL OUTER JOIN `fq-platform.ds_coe.domain_copyscape_main` ON url = input_domain
+WHERE url IN UNNEST(@flagged_domains);
+
+6C: For account_ids where Geo_mismatch_pct > 0.5:
+
+SELECT publisher_id, publisher_name, campaign_id, action_region, publisher_promotional_region, publisher_region, campaign_region, campaign_main_region, campaign_shipping_region, ROUND(SUM(total_actions_7day)/7) as total_actions
+FROM `customers-444618.compliance_agent.geo_mismatch_monitoring`
+WHERE DATE(data_date) >= CURRENT_DATE() - INTERVAL 30 DAY
+  AND publisher_id IN UNNEST(@geo_mismatch_accounts)
+GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+ORDER BY total_actions DESC;
+
+6D: For account_ids where High_risk_login_ip_pct > 0.1:
+
+SELECT account_id, ipaddr, COUNT(*) as logins,
+       SAFE_DIVIDE(COUNTIF(high_risk_ip = "yes"), COUNT(*)) as high_risk_logins,
+       SAFE_DIVIDE(COUNTIF(rc_ip_bot_activity), COUNT(*)) as bot_activity,
+       SAFE_DIVIDE(COUNTIF(rc_ip_crawler), COUNT(*)) as crawler,
+       SAFE_DIVIDE(COUNTIF(rc_ip_hosting_provider), COUNT(*)) as hosting_provider,
+       SAFE_DIVIDE(COUNTIF(rc_ip_proxy), COUNT(*)) as proxy
+FROM `customers-444618.compliance_agent.login_ip_risk_monitoring`
+WHERE DATE(data_date) > CURRENT_DATE() - INTERVAL 30 DAY
+  AND account_id IN UNNEST(@high_risk_ip_accounts)
+GROUP BY 1, 2
+ORDER BY logins DESC;
+
+6E: For account_ids where High_risk_login_email_pct > 0.1:
+
+SELECT account_id, email, COUNT(*) as logins,
+       SAFE_DIVIDE(COUNTIF(rc_email_disposable), COUNT(*)) as rc_email_disposable,
+       SAFE_DIVIDE(COUNTIF(rc_email_domain_risk), COUNT(*)) as rc_email_domain_risk,
+       SAFE_DIVIDE(COUNTIF(rc_email_fraud), COUNT(*)) as rc_email_fraud
+FROM `customers-444618.compliance_agent.login_email_risk_monitoring`
+WHERE DATE(data_date) > CURRENT_DATE() - INTERVAL 30 DAY
+  AND account_id IN UNNEST(@high_risk_email_accounts)
+GROUP BY 1, 2
+ORDER BY logins DESC;
+
+6F: For account_ids where Abnormal_peak_actions_pct > 0.1 or Abnormal_peak_clicks_pct > 0.1:
+
+SELECT publisher_id, campaign_id, actions_ewma6 as expected_actions, num_actions, perc_rise_actions, cam_perc_rise_actions, clicks_ewma6 as expected_clicks, num_clicks, perc_rise_clicks, cam_perc_rise_clicks
+FROM `customers-444618.compliance_agent.abnormal_peak_monitoring`
+WHERE DATE(data_date) > CURRENT_DATE() - INTERVAL 2 DAY
+  AND publisher_id IN UNNEST(@abnormal_peak_accounts)
+ORDER BY num_actions DESC;
+
+
+Step 7: Consolidation
+The agent will structure all query results into a nested JSON object, keyed by publisher_id. Each publisher ID will have sub-objects for:
+summary: Results from Step 2.1
+top_programs: Results from Step 2.2
+marketplace_history: Results from Step 3
+compliance_history: Results from Step 4
+risk_analysis: Containing keys 7D, 30D, 365D for results from Step 5.
+detailed_risk: Containing results from any triggered Step 6 queries.
+Step 8: Summary Generation (LLM)
+The consolidated JSON object is passed to an LLM.
+Prompt to LLM: "You are a fraud analyst. Based on the following data, provide a concise summary of the fraud risk for publisher {publisher_ID}, including their links to other accounts, their platform history, compliance issues, key risk indicators from monitoring, and recommended next steps. Reference the JIRA ticket {JIRA_ticket_ID if provided}. Data: {CONSOLIDATED_JSON}"
+The LLM generates the natural language output similar to the example provided.
+This comprehensive workflow directly uses the provided queries and logic, automates the data gathering and conditional analysis, and leverages an LLM for the final summarization to achieve the desired output.
+Troubleshooting_pca_continuous_monitoring.pdf used for grounding some of the information
+Sample Input/Output
+Input: 
+IRFRAUD-8254, 4381629
+
+Output
+
+This ticket concerns AppTastic Tech (4381629), who also own publisher account ID 3072943. They are also linked to AppTrust (2297391). They are based in Poland, and the primary business model of these accounts is as a mobile app install network. 
+
+Account 4381629 joined the platform in June 2023. They were accepted to the marketplace at the time, but are currently not admitted in the marketplace. They have earned over $168K from our platform since then, and over $13K in the last month. They have 50 active relationships on the platform, among which are TikTok and Binance.
+
+They have been reported for fraud concerns by Binance and TikTok. Binance expressed suspicion that their traffic and placements were so similar to those of AppTrust and that they were unable to present any detailed click reports, but the ticket was resolved without much follow-up. Our internal monitoring flagged them for click spamming for TikTok, but TikTok insisted on keeping them anyway. 
+
+The PCA Continuous Monitoring system has flagged both AppTastic and AppTrust consistently at the critical level for at least the past year, with average scores around 90 for each. This has been largely due to:
+Click spamming: these accounts have conversion rates well below 0.01%, which is extremely low in comparison to other publisher accounts
+Click Stuffing: over 80% of clicks we have seen from these accounts in the past year have anomalies in the request headers that are indicative of bot or otherwise invalid traffic
+High user entropy: we disproportionately see many clicks coming repeatedly from the same types of devices, indicating some kind of click farm or bot traffic
+
+The current ticket from Helium alleges that AppTastic and other publishers are creating spoofed app orders using an SDK loophole to create fake events. They cite as supporting evidence that the click-to-action times are extremely short and that IPs are all unique. PCA is not flagging the actions as resulting from injected clicks, though, and unique IPs are not necessarily a concern. However, given the high fraud risk and historical complaints associated with these partners, we should assume that there is a high likelihood of suspicious activity.
+
+Next steps:
+
+Place a qualified-to-pay hold on the affected partners
+Confirm the short click-to-action times
+Ask the brand for more detail on the SDK loophole and any internal evidence they have that the actions were spoofed
+
+If the allegations can be confirmed, then we should consider removing AppTastic from the platform as a whole and both removing AppTrust from the marketplace and the platform as a whole.

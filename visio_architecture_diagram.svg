@@ -1,0 +1,246 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 1060" width="100%" height="100%" font-family="Roboto, 'Segoe UI', Arial, sans-serif">
+  <defs>
+    <filter id="drop-shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.07"/>
+    </filter>
+    <filter id="card-shadow" x="-3%" y="-3%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.05"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1A73E8"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#7627BB"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#00796B"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#E37400"/>
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#5F6368"/>
+    </marker>
+    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A73E8"/>
+      <stop offset="100%" stop-color="#174EA6"/>
+    </linearGradient>
+    <linearGradient id="grad-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8430CE"/>
+      <stop offset="100%" stop-color="#5E1A9E"/>
+    </linearGradient>
+    <linearGradient id="grad-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00897B"/>
+      <stop offset="100%" stop-color="#004D40"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="100%" height="100%" fill="#F8F9FA"/>
+
+  <!-- ==================== HEADER & TITLE ==================== -->
+  <text x="45" y="42" font-size="23" font-weight="bold" fill="#202124">Impact Compliance &amp; Fraud Detection Agent — Enterprise Architecture</text>
+  <text x="45" y="66" font-size="12.5" fill="#5F6368">Vertex AI Agent Platform • Gemini 2.5/3.6 • KV Cache (Context Caching) • Memory Bank • Autonomous Evals Suite</text>
+
+  <!-- Capability Highlights Badges -->
+  <rect x="780" y="24" width="105" height="24" rx="12" fill="#E8F0FE" stroke="#1A73E8" stroke-width="1"/>
+  <text x="832" y="40" font-size="10.5" font-weight="bold" fill="#174EA6" text-anchor="middle">⚡ Async Pipeline</text>
+
+  <rect x="895" y="24" width="115" height="24" rx="12" fill="#F3E8FF" stroke="#9334E6" stroke-width="1"/>
+  <text x="952" y="40" font-size="10.5" font-weight="bold" fill="#6B21A8" text-anchor="middle">🔥 KV Cache Enabled</text>
+
+  <rect x="1020" y="24" width="105" height="24" rx="12" fill="#E0F2F1" stroke="#00796B" stroke-width="1"/>
+  <text x="1072" y="40" font-size="10.5" font-weight="bold" fill="#004D40" text-anchor="middle">🧠 Memory Bank</text>
+
+  <rect x="1135" y="24" width="80" height="24" rx="12" fill="#FEF7E0" stroke="#F29900" stroke-width="1"/>
+  <text x="1175" y="40" font-size="10.5" font-weight="bold" fill="#B06000" text-anchor="middle">⚖️ Evals Suite</text>
+
+
+  <!-- ==================== LAYER 1: CLIENT, RUNTIME & EVALS LAYER ==================== -->
+  <rect x="45" y="85" width="1170" height="120" rx="8" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#drop-shadow)"/>
+  <text x="65" y="110" font-size="11.5" font-weight="bold" fill="#70757A" letter-spacing="1">1. CLIENT, RUNTIME &amp; EVALUATION LAYER</text>
+
+  <!-- Client 1: Analyst -->
+  <rect x="65" y="122" width="220" height="68" rx="6" fill="#F1F3F4" stroke="#BDC1C6" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="175" y="146" font-size="12" font-weight="bold" fill="#202124" text-anchor="middle">Compliance Analyst / JIRA</text>
+  <text x="175" y="163" font-size="10.5" fill="#5F6368" text-anchor="middle">Ticket &amp; Publisher Inquiry</text>
+  <text x="175" y="179" font-size="10" font-weight="bold" fill="#1A73E8" text-anchor="middle">Input: "IRFRAUD-8254, 4381629"</text>
+
+  <!-- Client 2: Interactive App -->
+  <rect x="300" y="122" width="190" height="68" rx="6" fill="#E8F0FE" stroke="#1A73E8" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <text x="395" y="146" font-size="12" font-weight="bold" fill="#174EA6" text-anchor="middle">Gemini Enterprise App</text>
+  <text x="395" y="163" font-size="10.5" fill="#1967D2" text-anchor="middle">Interactive Multi-Turn UI</text>
+  <text x="395" y="179" font-size="10" fill="#174EA6" text-anchor="middle">Real-time Thinking Mode Stream</text>
+
+  <!-- Runtime: Vertex AI Agent Engine -->
+  <rect x="505" y="122" width="375" height="68" rx="6" fill="#E6F4EA" stroke="#34A853" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <text x="692" y="144" font-size="12" font-weight="bold" fill="#137333" text-anchor="middle">Vertex AI Agent Platform (Agent Engine)</text>
+  <text x="692" y="161" font-size="10" font-weight="bold" fill="#188038" text-anchor="middle">Instance: reasoningEngines/4135651909425954816</text>
+  <text x="692" y="177" font-size="9.5" fill="#5F6368" text-anchor="middle">Managed Autoscaling • OpenTelemetry Trace Exporter • Agent Engine Sessions</text>
+
+  <!-- NEW CAPABILITY: Evals Suite & LLM-as-a-Judge -->
+  <rect x="895" y="122" width="305" height="68" rx="6" fill="#FEF7E0" stroke="#F9AB00" stroke-width="2" filter="url(#card-shadow)"/>
+  <text x="1047" y="143" font-size="12" font-weight="bold" fill="#B06000" text-anchor="middle">🛡️ Automated Evals &amp; LLM-as-a-Judge</text>
+  <text x="1047" y="159" font-size="10" fill="#704800" text-anchor="middle">CLI: `evals/run_evals.py --mock / --live`</text>
+  <text x="1047" y="174" font-size="9.5" fill="#5F6368" text-anchor="middle">6 Golden Scenarios (`eval_dataset.json`) • 5 Rubrics</text>
+
+
+  <!-- ==================== LAYER 2: AGENTIC CORE & MULTI-AGENT SUPERVISOR ==================== -->
+  <rect x="45" y="225" width="1170" height="280" rx="8" fill="#E8F0FE" stroke="#4285F4" stroke-width="1.5" filter="url(#drop-shadow)"/>
+  <text x="65" y="249" font-size="11.5" font-weight="bold" fill="#1A73E8" letter-spacing="1">2. AGENTIC REASONING, KV CACHE &amp; MULTI-AGENT SUPERVISOR (google-adk App)</text>
+
+  <!-- App Wrapper & KV Cache Box -->
+  <rect x="65" y="262" width="275" height="84" rx="8" fill="#F3E8FF" stroke="#9334E6" stroke-width="2" filter="url(#card-shadow)"/>
+  <text x="202" y="283" font-size="12.5" font-weight="bold" fill="#6B21A8" text-anchor="middle">⚡ KV Cache (Context Caching)</text>
+  <text x="202" y="299" font-size="10" font-weight="bold" fill="#7E22CE" text-anchor="middle">ContextCacheConfig on ADK App</text>
+  <text x="80" y="316" font-size="9.5" fill="#3B0764">• TTL: 3600s (1 hour) | Min Tokens: 2048</text>
+  <text x="80" y="330" font-size="9.5" fill="#3B0764">• Caches system instruction, 19 tools &amp; context</text>
+  <text x="80" y="342" font-size="9" font-weight="bold" fill="#6B21A8">✓ Cuts latency &amp; token cost on recurring turns</text>
+
+  <!-- Root Supervisor Agent -->
+  <rect x="65" y="356" width="275" height="135" rx="8" fill="url(#grad-blue)" stroke="#174EA6" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <text x="202" y="378" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">compliance_agent</text>
+  <text x="202" y="395" font-size="11" font-weight="bold" fill="#D2E3FC" text-anchor="middle">Root Supervisor Agent (LlmAgent)</text>
+  <line x1="85" y1="403" x2="320" y2="403" stroke="#FFFFFF" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="80" y="420" font-size="10" fill="#FFFFFF">• Model: gemini-2.5-flash / gemini-3.6-flash</text>
+  <text x="80" y="435" font-size="10" fill="#FFFFFF">• Planner: BuiltInPlanner (Thinking Mode)</text>
+  <text x="80" y="450" font-size="10" fill="#FFFFFF">• 8-Step End-to-End Orchestration</text>
+  <text x="80" y="465" font-size="10" fill="#FFFFFF">• Parallel Pipeline Trigger &amp; Synthesis</text>
+  <text x="80" y="480" font-size="10" font-weight="bold" fill="#E0F2F1">• Integrated with Agent Platform Memory</text>
+
+  <!-- Sub-Agent 1: Account Analyst -->
+  <rect x="360" y="262" width="260" height="229" rx="8" fill="#FFFFFF" stroke="#34A853" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <rect x="360" y="262" width="260" height="34" rx="8" fill="#E6F4EA"/>
+  <text x="490" y="284" font-size="13" font-weight="bold" fill="#137333" text-anchor="middle">account_analyst</text>
+  <text x="375" y="315" font-size="11" font-weight="bold" fill="#202124">Entity &amp; Graph Specialist</text>
+  <text x="375" y="336" font-size="10" fill="#3C4043">• Step 1: Account Graph Linkages</text>
+  <text x="375" y="354" font-size="10" fill="#5F6368">  (Uncovers linked IDs: 3072943, 2297391)</text>
+  <text x="375" y="372" font-size="10" fill="#3C4043">• Step 2: Profile, Domicile, Lifetime GTV</text>
+  <text x="375" y="390" font-size="10" fill="#3C4043">• Step 2.2: Top 10 Partnership Programs</text>
+  <text x="375" y="408" font-size="10" fill="#3C4043">• Step 3: Marketplace &amp; RTAS Decline History</text>
+  <text x="375" y="426" font-size="10" fill="#5F6368">  (Duplicate devices, high-risk emails/IPs)</text>
+  <text x="375" y="444" font-size="10" fill="#3C4043">• Step 4: JIRA Fraud Issues &amp; Notes</text>
+  <text x="375" y="462" font-size="10" fill="#5F6368">  (Binance &amp; TikTok historical complaints)</text>
+
+  <!-- Sub-Agent 2: Risk Analyst -->
+  <rect x="640" y="262" width="265" height="229" rx="8" fill="#FFFFFF" stroke="#FBBC04" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <rect x="640" y="262" width="265" height="34" rx="8" fill="#FEF7E0"/>
+  <text x="772" y="284" font-size="13" font-weight="bold" fill="#B06000" text-anchor="middle">risk_analyst</text>
+  <text x="655" y="315" font-size="11" font-weight="bold" fill="#202124">Continuous Monitoring Analyst</text>
+  <text x="655" y="336" font-size="10" fill="#3C4043">• Step 5: 7D / 30D / 365D PCA Metrics</text>
+  <text x="655" y="354" font-size="10" fill="#B06000" font-weight="bold">• Step 6: 30D Threshold Triggers:</text>
+  <text x="665" y="372" font-size="9.5" fill="#3C4043">▸ 6A: Attribution / Short CTA (>0.1)</text>
+  <text x="665" y="390" font-size="9.5" fill="#3C4043">▸ 6B &amp; 6B1: URL Risk &amp; SEMrush Traffic (>0.1)</text>
+  <text x="665" y="408" font-size="9.5" fill="#3C4043">▸ 6C: Geo Mismatch Analysis (>0.5)</text>
+  <text x="665" y="426" font-size="9.5" fill="#3C4043">▸ 6D: Login IP Bot &amp; Proxy Risk (>0.1)</text>
+  <text x="665" y="444" font-size="9.5" fill="#3C4043">▸ 6E: Login Disposable Email Risk (>0.1)</text>
+  <text x="665" y="462" font-size="9.5" fill="#3C4043">▸ 6F: Abnormal Peak Volume EWMA (>0.1)</text>
+
+  <!-- Sub-Agent 3: Report Writer -->
+  <rect x="925" y="262" width="275" height="229" rx="8" fill="#FFFFFF" stroke="#EA4335" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <rect x="925" y="262" width="275" height="34" rx="8" fill="#FCE8E6"/>
+  <text x="1062" y="284" font-size="13" font-weight="bold" fill="#C5221F" text-anchor="middle">report_writer</text>
+  <text x="940" y="315" font-size="11" font-weight="bold" fill="#202124">Executive Synthesis Specialist</text>
+  <text x="940" y="336" font-size="10" fill="#3C4043">• Step 8: Grounded 6-Section Report:</text>
+  <text x="950" y="354" font-size="9.5" fill="#5F6368">1. Entity Identification &amp; Account Graph</text>
+  <text x="950" y="372" font-size="9.5" fill="#5F6368">2. Platform &amp; Commercial History</text>
+  <text x="950" y="390" font-size="9.5" fill="#5F6368">3. Historical Complaints &amp; JIRA Tickets</text>
+  <text x="950" y="408" font-size="9.5" fill="#5F6368">4. PCA Indicators (Spam, Stuffing, Entropy)</text>
+  <text x="950" y="426" font-size="9.5" fill="#5F6368">5. Objective Allegation Rebuttal</text>
+  <text x="950" y="444" font-size="9.5" fill="#5F6368">6. Actionable Next Steps (Holds &amp; Bans)</text>
+  <text x="940" y="468" font-size="9.5" font-weight="bold" fill="#C5221F">✓ Grounded in troubleshooting_pca.pdf</text>
+
+
+  <!-- ==================== LAYER 3: AGENT PLATFORM MEMORY BANK LAYER ==================== -->
+  <rect x="45" y="525" width="1170" height="120" rx="8" fill="#E0F2F1" stroke="#00796B" stroke-width="1.5" filter="url(#drop-shadow)"/>
+  <text x="65" y="549" font-size="11.5" font-weight="bold" fill="#004D40" letter-spacing="1">3. AGENT PLATFORM MEMORY BANK LAYER (VertexAiMemoryBankService &amp; Session Continuity)</text>
+
+  <!-- Box 1: Vertex AI Memory Bank Service -->
+  <rect x="65" y="560" width="460" height="70" rx="6" fill="#FFFFFF" stroke="#00897B" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <text x="80" y="582" font-size="12" font-weight="bold" fill="#004D40">VertexAiMemoryBankService (Cloud Service)</text>
+  <text x="80" y="600" font-size="10" fill="#3C4043">Endpoint: agentengine://4135651909425954816 • Scope: {app_name, user_id}</text>
+  <text x="80" y="618" font-size="9.5" fill="#5F6368">Semantic Similarity Search • Fact Extraction • Ingest Events • Profiles Lookup</text>
+
+  <!-- Box 2: Preload and Load Memory Tools -->
+  <rect x="545" y="560" width="370" height="70" rx="6" fill="#FFFFFF" stroke="#00897B" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <text x="560" y="582" font-size="12" font-weight="bold" fill="#00796B">Memory Integration Tools (root_agent)</text>
+  <text x="560" y="600" font-size="10" fill="#3C4043">• preload_memory_tool: Pre-turn auto-retrieval into prompt</text>
+  <text x="560" y="618" font-size="10" fill="#3C4043">• load_memory_tool: Explicit semantic query by model</text>
+
+  <!-- Box 3: Local Dev & CI In-Memory Memory Service -->
+  <rect x="935" y="560" width="265" height="70" rx="6" fill="#FFFFFF" stroke="#80CBC4" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="950" y="582" font-size="12" font-weight="bold" fill="#004D40">InMemoryMemoryService</text>
+  <text x="950" y="600" font-size="10" fill="#3C4043">Local In-Memory Cache for Testing</text>
+  <text x="950" y="618" font-size="9.5" fill="#5F6368">Used in pytest, offline evals &amp; local dev</text>
+
+
+  <!-- ==================== LAYER 4: ASYNC TOOLING & PIPELINE EXECUTION ==================== -->
+  <rect x="45" y="665" width="1170" height="120" rx="8" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#drop-shadow)"/>
+  <text x="65" y="689" font-size="11.5" font-weight="bold" fill="#70757A" letter-spacing="1">4. ASYNCHRONOUS TOOLING &amp; PIPELINE EXECUTION ENGINE</text>
+
+  <!-- Orchestrator Tool -->
+  <rect x="65" y="700" width="460" height="70" rx="6" fill="#F8F9FA" stroke="#BDC1C6" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="80" y="722" font-size="12" font-weight="bold" fill="#1A73E8">run_full_investigation_pipeline(publisher_id, jira_ticket_id)</text>
+  <text x="80" y="740" font-size="10" fill="#3C4043">Non-blocking parallel extraction orchestrator using asyncio.gather.</text>
+  <text x="80" y="756" font-size="9.5" fill="#5F6368">Executes Steps 1-7, evaluates Step 6 triggers, and yields consolidated JSON.</text>
+
+  <!-- BigQuery Async Tools -->
+  <rect x="545" y="700" width="370" height="70" rx="6" fill="#F8F9FA" stroke="#BDC1C6" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="560" y="722" font-size="12" font-weight="bold" fill="#202124">BigQuery Async Tools (14 APIs)</text>
+  <text x="560" y="740" font-size="10" fill="#3C4043">Async thread wrappers: asyncio.to_thread(_query)</text>
+  <text x="560" y="756" font-size="9.5" fill="#5F6368">Parameterized SQL queries targeting BigQuery dataset</text>
+
+  <!-- GCS Knowledge Grounding -->
+  <rect x="935" y="700" width="265" height="70" rx="6" fill="#F8F9FA" stroke="#BDC1C6" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="950" y="722" font-size="12" font-weight="bold" fill="#202124">GCS Grounding Tools</text>
+  <text x="950" y="740" font-size="10" fill="#3C4043">PCA Continuous Monitoring Rules</text>
+  <text x="950" y="756" font-size="9.5" fill="#5F6368">`get_grounding_knowledge` (cached)</text>
+
+
+  <!-- ==================== LAYER 5: GOOGLE CLOUD STORAGE & DATA LAYER ==================== -->
+  <rect x="45" y="805" width="1170" height="150" rx="8" fill="#FFFFFF" stroke="#DADCE0" stroke-width="1.5" filter="url(#drop-shadow)"/>
+  <text x="65" y="829" font-size="11.5" font-weight="bold" fill="#70757A" letter-spacing="1">5. GOOGLE CLOUD ENTERPRISE DATA &amp; STORAGE LAYER (Project: customers-444618)</text>
+
+  <!-- BigQuery Dataset -->
+  <rect x="65" y="842" width="670" height="98" rx="6" fill="#E8F0FE" stroke="#4285F4" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="80" y="864" font-size="12" font-weight="bold" fill="#174EA6">Google BigQuery (Dataset: compliance_agent)</text>
+  <text x="80" y="883" font-size="9.5" fill="#3C4043">• Core Tables: account_graph_main_20251106, publisher_20251106, partnership_affiliation, rtas_results</text>
+  <text x="80" y="900" font-size="9.5" fill="#3C4043">• History &amp; Scores: iram_application_scored_20251106, raw_jira_20251106, comments_20251106, partner_continuous_monitoring_final_scores</text>
+  <text x="80" y="917" font-size="9.5" fill="#3C4043">• Drilldowns: attribution_risk_monitoring_new, url_risk_monitoring, intelligence_semrush, geo_mismatch, login_ip, login_email, abnormal_peak</text>
+
+  <!-- GCS Bucket -->
+  <rect x="750" y="842" width="230" height="98" rx="6" fill="#E6F4EA" stroke="#34A853" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="765" y="864" font-size="12" font-weight="bold" fill="#137333">Cloud Storage (GCS)</text>
+  <text x="765" y="884" font-size="10" fill="#3C4043">Bucket: gs://impact_compliance-1/</text>
+  <text x="765" y="902" font-size="9.5" fill="#5F6368">troubleshooting_pca_continuous_monitoring.pdf</text>
+  <text x="765" y="922" font-size="9.5" font-weight="bold" fill="#137333">✓ Domain Grounding Store</text>
+
+  <!-- Telemetry & Cloud Trace -->
+  <rect x="995" y="842" width="205" height="98" rx="6" fill="#F1F3F4" stroke="#BDC1C6" stroke-width="1" filter="url(#card-shadow)"/>
+  <text x="1010" y="864" font-size="12" font-weight="bold" fill="#202124">Cloud Trace / OTel</text>
+  <text x="1010" y="884" font-size="10" fill="#3C4043">Exporter: gcp_trace</text>
+  <text x="1010" y="902" font-size="9.5" fill="#5F6368">Service: compliance_agent</text>
+  <text x="1010" y="922" font-size="9.5" font-weight="bold" fill="#1A73E8">✓ Distributed Traces</text>
+
+
+  <!-- ==================== FLOW & CONNECTION LINES ==================== -->
+  <!-- Layer 1 to 2 -->
+  <line x1="175" y1="190" x2="175" y2="260" stroke="#1A73E8" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="395" y1="190" x2="395" y2="260" stroke="#1A73E8" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="692" y1="190" x2="692" y2="260" stroke="#34A853" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="1047" y1="190" x2="1047" y2="260" stroke="#F9AB00" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+
+  <!-- Layer 2 internal & to Layer 3 -->
+  <line x1="340" y1="420" x2="360" y2="420" stroke="#1A73E8" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="202" y1="491" x2="202" y2="560" stroke="#00796B" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- Layer 3 to Layer 4 -->
+  <line x1="295" y1="630" x2="295" y2="700" stroke="#1A73E8" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="730" y1="630" x2="730" y2="700" stroke="#00796B" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- Layer 4 to Layer 5 -->
+  <line x1="295" y1="770" x2="295" y2="842" stroke="#4285F4" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="730" y1="770" x2="730" y2="842" stroke="#4285F4" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <line x1="1067" y1="770" x2="865" y2="842" stroke="#34A853" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+</svg>

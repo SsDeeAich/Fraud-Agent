@@ -1,0 +1,496 @@
+[
+  {
+    "eval_id": "EVAL-001-PROMPT02-BASELINE",
+    "scenario_name": "Multi-Account Syndicate with Alleged SDK Exploit (Prompt02 Baseline)",
+    "description": "AppTastic Tech linked to AppTrust. High continuous monitoring scores (~90, Critical). Click spamming (<0.01% CVR) and click stuffing (>80% anomalies). Reconciles Helium SDK exploit allegation vs internal PCA telemetry.",
+    "input": {
+      "user_prompt": "IRFRAUD-8254, 4381629",
+      "publisher_id": 4381629,
+      "jira_ticket_id": "IRFRAUD-8254"
+    },
+    "mock_context": {
+      "account_list": [4381629, 3072943, 2297391],
+      "primary_publisher": {
+        "publisher_id": 4381629,
+        "publisher_name": "AppTastic Tech",
+        "country": "Poland",
+        "primary_promo_method": "Mobile app install network",
+        "account_creation_date": "2023-06-15",
+        "marketplace_status": "rejected",
+        "lifetime_gtv": 168450.00,
+        "last_30_day_day_gtv": 13200.00,
+        "partnership_count": 50,
+        "is_qualified_to_pay": 1
+      },
+      "linked_publishers": [
+        {
+          "publisher_id": 3072943,
+          "publisher_name": "AppTastic Tech Sub",
+          "country": "Poland"
+        },
+        {
+          "publisher_id": 2297391,
+          "publisher_name": "AppTrust",
+          "country": "Poland"
+        }
+      ],
+      "top_programs": "TikTok, Binance, Helium, AliExpress, Shein, Temu, Uber, DoorDash, Deliveroo, Shopee",
+      "marketplace_history": [
+        {"publisher_id": 4381629, "evaluation": "FAILED", "decline_reasons": "duplicate_device,high_risk_ip"},
+        {"publisher_id": 2297391, "evaluation": "FAILED", "decline_reasons": "duplicate_device,non_unique_media_property"}
+      ],
+      "compliance_jira_history": [
+        {
+          "issue_id": "IRFRAUD-5521",
+          "partner_id": "4381629",
+          "summary": "Binance fraud report - traffic overlap with AppTrust and lack of click logs",
+          "status": "Resolved",
+          "comment": "Binance reported traffic identical to 2297391, no detailed click reports provided."
+        },
+        {
+          "issue_id": "IRFRAUD-6104",
+          "partner_id": "4381629",
+          "summary": "Internal click spamming alert on TikTok campaigns",
+          "status": "Closed",
+          "comment": "Internal monitoring flagged click spamming; advertiser opted to retain partner."
+        }
+      ],
+      "metrics_30d": {
+        "publisher_id": 4381629,
+        "avg_final_score": 90.5,
+        "critical_flagged_pct": 0.95,
+        "elevated_flagged_pct": 0.05,
+        "mild_flagged_pct": 0.00,
+        "Click_spamming_pct": 0.42,
+        "cs_clicks_pct": 0.84,
+        "cs_actions_pct": 0.35,
+        "avg_user_entropy": 0.88,
+        "Injected_click_pct": 0.00,
+        "long_cta_pct": 0.02,
+        "High_risk_login_ip_pct": 0.16,
+        "High_risk_login_email_pct": 0.01,
+        "High_risk_url_action_pct": 0.03,
+        "Geo_mismatch_pct": 0.08,
+        "Abnormal_peak_actions_pct": 0.02,
+        "Abnormal_peak_clicks_pct": 0.03
+      }
+    },
+    "expected_trajectory": {
+      "required_tools": [
+        "get_linked_accounts",
+        "get_publisher_summary",
+        "get_top_programs",
+        "get_marketplace_history",
+        "get_compliance_jira_history",
+        "get_risk_scores"
+      ],
+      "step_6_triggers": {
+        "6A_attribution": true,
+        "6B_url_risk": false,
+        "6B1_semrush": false,
+        "6C_geo_mismatch": false,
+        "6D_login_ip": true,
+        "6E_login_email": false,
+        "6F_abnormal_peaks": false
+      }
+    },
+    "expected_report_assertions": {
+      "must_contain_entities": ["AppTastic", "4381629", "AppTrust", "2297391", "Poland"],
+      "must_contain_earnings": ["168", "13"],
+      "must_contain_partners": ["TikTok", "Binance", "Helium"],
+      "must_contain_fraud_signals": ["click spamming", "click stuffing", "user entropy"],
+      "reconcile_allegation": "PCA does NOT flag injected clicks and unique IPs alone are not proof, but overall fraud history and risk scores indicate high likelihood of suspicious activity.",
+      "must_contain_actions": [
+        "qualified-to-pay hold",
+        "confirm short click-to-action",
+        "request brand evidence",
+        "remove from platform or marketplace"
+      ],
+      "overall_severity": "CRITICAL"
+    }
+  },
+  {
+    "eval_id": "EVAL-002-CLEAN-PUBLISHER",
+    "scenario_name": "Benign High-Volume Publisher (False Positive Check)",
+    "description": "Legitimate Nordic loyalty publisher with high GTV, low fraud risk score (<15), clean login records, zero Step 6 threshold violations. Verifies agent does NOT falsely accuse legitimate partners.",
+    "input": {
+      "user_prompt": "IRFRAUD-9102, 1084221",
+      "publisher_id": 1084221,
+      "jira_ticket_id": "IRFRAUD-9102"
+    },
+    "mock_context": {
+      "account_list": [1084221],
+      "primary_publisher": {
+        "publisher_id": 1084221,
+        "publisher_name": "Nordic Savings Hub",
+        "country": "Sweden",
+        "primary_promo_method": "Loyalty and Cashback",
+        "account_creation_date": "2021-04-10",
+        "marketplace_status": "approved",
+        "lifetime_gtv": 890000.00,
+        "last_30_day_day_gtv": 84000.00,
+        "partnership_count": 120,
+        "is_qualified_to_pay": 1
+      },
+      "linked_publishers": [],
+      "top_programs": "H&M, IKEA, Nike, Zalando, ASOS, Spotify, Electrolux, Volvo Shop, CDON, Boozt",
+      "marketplace_history": [
+        {"publisher_id": 1084221, "evaluation": "APPROVED", "decline_reasons": ""}
+      ],
+      "compliance_jira_history": [],
+      "metrics_30d": {
+        "publisher_id": 1084221,
+        "avg_final_score": 11.2,
+        "critical_flagged_pct": 0.00,
+        "elevated_flagged_pct": 0.01,
+        "mild_flagged_pct": 0.99,
+        "Click_spamming_pct": 0.01,
+        "cs_clicks_pct": 0.01,
+        "cs_actions_pct": 0.01,
+        "avg_user_entropy": 0.12,
+        "Injected_click_pct": 0.00,
+        "long_cta_pct": 0.03,
+        "High_risk_login_ip_pct": 0.01,
+        "High_risk_login_email_pct": 0.00,
+        "High_risk_url_action_pct": 0.01,
+        "Geo_mismatch_pct": 0.03,
+        "Abnormal_peak_actions_pct": 0.05,
+        "Abnormal_peak_clicks_pct": 0.06
+      }
+    },
+    "expected_trajectory": {
+      "required_tools": [
+        "get_linked_accounts",
+        "get_publisher_summary",
+        "get_top_programs",
+        "get_marketplace_history",
+        "get_compliance_jira_history",
+        "get_risk_scores"
+      ],
+      "step_6_triggers": {
+        "6A_attribution": false,
+        "6B_url_risk": false,
+        "6B1_semrush": false,
+        "6C_geo_mismatch": false,
+        "6D_login_ip": false,
+        "6E_login_email": false,
+        "6F_abnormal_peaks": false
+      }
+    },
+    "expected_report_assertions": {
+      "must_contain_entities": ["Nordic Savings Hub", "1084221", "Sweden", "Cashback"],
+      "must_contain_fraud_signals": ["low risk", "clean", "mild"],
+      "must_not_contain_actions": ["hold", "suspend", "remove from platform"],
+      "must_contain_actions": ["maintain active status", "close ticket", "unsubstantiated"],
+      "overall_severity": "MILD_OR_BENIGN"
+    }
+  },
+  {
+    "eval_id": "EVAL-003-GEO-CONTENT-ARBITRAGE",
+    "scenario_name": "Scraped Content & Severe Cross-Border Geo-Mismatch",
+    "description": "Publisher operating scrapers and routing offshore traffic. High_risk_url_action_pct > 0.1 and Geo_mismatch_pct > 0.5. Must trigger 6B, 6B1, and 6C.",
+    "input": {
+      "user_prompt": "IRFRAUD-9442, 6109923",
+      "publisher_id": 6109923,
+      "jira_ticket_id": "IRFRAUD-9442"
+    },
+    "mock_context": {
+      "account_list": [6109923, 6109988],
+      "primary_publisher": {
+        "publisher_id": 6109923,
+        "publisher_name": "Daily Trends Global",
+        "country": "Cyprus",
+        "primary_promo_method": "Content / Reviews",
+        "account_creation_date": "2024-01-20",
+        "marketplace_status": "approved",
+        "lifetime_gtv": 45000.00,
+        "last_30_day_day_gtv": 11500.00,
+        "partnership_count": 18,
+        "is_qualified_to_pay": 1
+      },
+      "linked_publishers": [
+        {"publisher_id": 6109988, "publisher_name": "Daily Buzz Network", "country": "Cyprus"}
+      ],
+      "top_programs": "NordVPN, ExpressVPN, Surfshark, Coursera, Udemy",
+      "marketplace_history": [
+        {"publisher_id": 6109923, "evaluation": "PASSED", "decline_reasons": ""}
+      ],
+      "compliance_jira_history": [
+        {
+          "issue_id": "IRFRAUD-8901",
+          "partner_id": "6109923",
+          "summary": "Advertiser flagged non-US conversion traffic on US-only offer",
+          "status": "Investigating",
+          "comment": "ExpressVPN noticed over 70% of conversions originating outside contracted geos."
+        }
+      ],
+      "metrics_30d": {
+        "publisher_id": 6109923,
+        "avg_final_score": 83.4,
+        "critical_flagged_pct": 0.88,
+        "elevated_flagged_pct": 0.12,
+        "mild_flagged_pct": 0.00,
+        "Click_spamming_pct": 0.02,
+        "cs_clicks_pct": 0.05,
+        "cs_actions_pct": 0.02,
+        "avg_user_entropy": 0.31,
+        "Injected_click_pct": 0.00,
+        "long_cta_pct": 0.01,
+        "High_risk_login_ip_pct": 0.03,
+        "High_risk_login_email_pct": 0.02,
+        "High_risk_url_action_pct": 0.36,
+        "Geo_mismatch_pct": 0.74,
+        "Abnormal_peak_actions_pct": 0.04,
+        "Abnormal_peak_clicks_pct": 0.03
+      }
+    },
+    "expected_trajectory": {
+      "required_tools": [
+        "get_linked_accounts",
+        "get_publisher_summary",
+        "get_risk_scores"
+      ],
+      "step_6_triggers": {
+        "6A_attribution": false,
+        "6B_url_risk": true,
+        "6B1_semrush": true,
+        "6C_geo_mismatch": true,
+        "6D_login_ip": false,
+        "6E_login_email": false,
+        "6F_abnormal_peaks": false
+      }
+    },
+    "expected_report_assertions": {
+      "must_contain_entities": ["Daily Trends Global", "6109923", "Daily Buzz Network", "Cyprus"],
+      "must_contain_fraud_signals": ["geo mismatch", "URL risk", "copied content", "bounce rate"],
+      "must_contain_actions": ["qualified-to-pay hold", "audit domain", "terminate partnerships", "geo restriction"],
+      "overall_severity": "CRITICAL"
+    }
+  },
+  {
+    "eval_id": "EVAL-004-BOTNET-CREDENTIAL-STUFFING",
+    "scenario_name": "Botnet & Proxy Credential Stuffing Ring",
+    "description": "Multi-account network exhibiting high proxy logins (>10%) and disposable temporary email usage (>10%). Must trigger 6D and 6E.",
+    "input": {
+      "user_prompt": "IRFRAUD-9620, 7820199",
+      "publisher_id": 7820199,
+      "jira_ticket_id": "IRFRAUD-9620"
+    },
+    "mock_context": {
+      "account_list": [7820199, 7820205, 7820211],
+      "primary_publisher": {
+        "publisher_id": 7820199,
+        "publisher_name": "FastRewards Club",
+        "country": "Estonia",
+        "primary_promo_method": "Incentivized / Rewards",
+        "account_creation_date": "2023-11-01",
+        "marketplace_status": "approved",
+        "lifetime_gtv": 72000.00,
+        "last_30_day_day_gtv": 19400.00,
+        "partnership_count": 34,
+        "is_qualified_to_pay": 1
+      },
+      "linked_publishers": [
+        {"publisher_id": 7820205, "publisher_name": "FastPoints Pro", "country": "Estonia"},
+        {"publisher_id": 7820211, "publisher_name": "SpeedyCash Media", "country": "Estonia"}
+      ],
+      "top_programs": "GameFly, Raid Shadow Legends, DraftKings, FanDuel",
+      "marketplace_history": [
+        {"publisher_id": 7820199, "evaluation": "PASSED", "decline_reasons": ""},
+        {"publisher_id": 7820211, "evaluation": "FAILED", "decline_reasons": "high_risk_email_domain,duplicate_device"}
+      ],
+      "compliance_jira_history": [
+        {
+          "issue_id": "IRFRAUD-9110",
+          "partner_id": "7820199",
+          "summary": "High chargeback rate and bot registration alerts from DraftKings",
+          "status": "Open",
+          "comment": "Over 40% of referred accounts failed verification due to bot patterns."
+        }
+      ],
+      "metrics_30d": {
+        "publisher_id": 7820199,
+        "avg_final_score": 87.0,
+        "critical_flagged_pct": 0.91,
+        "elevated_flagged_pct": 0.09,
+        "mild_flagged_pct": 0.00,
+        "Click_spamming_pct": 0.03,
+        "cs_clicks_pct": 0.04,
+        "cs_actions_pct": 0.02,
+        "avg_user_entropy": 0.65,
+        "Injected_click_pct": 0.01,
+        "long_cta_pct": 0.02,
+        "High_risk_login_ip_pct": 0.58,
+        "High_risk_login_email_pct": 0.44,
+        "High_risk_url_action_pct": 0.02,
+        "Geo_mismatch_pct": 0.09,
+        "Abnormal_peak_actions_pct": 0.03,
+        "Abnormal_peak_clicks_pct": 0.04
+      }
+    },
+    "expected_trajectory": {
+      "required_tools": [
+        "get_linked_accounts",
+        "get_publisher_summary",
+        "get_risk_scores"
+      ],
+      "step_6_triggers": {
+        "6A_attribution": false,
+        "6B_url_risk": false,
+        "6B1_semrush": false,
+        "6C_geo_mismatch": false,
+        "6D_login_ip": true,
+        "6E_login_email": true,
+        "6F_abnormal_peaks": false
+      }
+    },
+    "expected_report_assertions": {
+      "must_contain_entities": ["FastRewards Club", "7820199", "FastPoints Pro", "SpeedyCash Media"],
+      "must_contain_fraud_signals": ["disposable email", "proxy", "bot login", "hosting provider"],
+      "must_contain_actions": ["qualified-to-pay hold", "revoke login credentials", "terminate all linked accounts"],
+      "overall_severity": "CRITICAL"
+    }
+  },
+  {
+    "eval_id": "EVAL-005-ABNORMAL-PEAK-EWMA",
+    "scenario_name": "Unexplained Volume Surge (Abnormal Peak EWMA Anomaly)",
+    "description": "Sudden volume rise where Abnormal_peak_actions_pct > 0.1 and Abnormal_peak_clicks_pct > 0.1. Must trigger 6F.",
+    "input": {
+      "user_prompt": "IRFRAUD-9781, 5214800",
+      "publisher_id": 5214800,
+      "jira_ticket_id": "IRFRAUD-9781"
+    },
+    "mock_context": {
+      "account_list": [5214800],
+      "primary_publisher": {
+        "publisher_id": 5214800,
+        "publisher_name": "PulseClick Network",
+        "country": "United States",
+        "primary_promo_method": "Search / PPC",
+        "account_creation_date": "2023-08-12",
+        "marketplace_status": "approved",
+        "lifetime_gtv": 110000.00,
+        "last_30_day_day_gtv": 32000.00,
+        "partnership_count": 22,
+        "is_qualified_to_pay": 1
+      },
+      "linked_publishers": [],
+      "top_programs": "Capital One, Chase, Credit Karma, NerdWallet",
+      "marketplace_history": [
+        {"publisher_id": 5214800, "evaluation": "PASSED", "decline_reasons": ""}
+      ],
+      "compliance_jira_history": [],
+      "metrics_30d": {
+        "publisher_id": 5214800,
+        "avg_final_score": 75.8,
+        "critical_flagged_pct": 0.40,
+        "elevated_flagged_pct": 0.55,
+        "mild_flagged_pct": 0.05,
+        "Click_spamming_pct": 0.02,
+        "cs_clicks_pct": 0.03,
+        "cs_actions_pct": 0.02,
+        "avg_user_entropy": 0.20,
+        "Injected_click_pct": 0.01,
+        "long_cta_pct": 0.02,
+        "High_risk_login_ip_pct": 0.02,
+        "High_risk_login_email_pct": 0.01,
+        "High_risk_url_action_pct": 0.03,
+        "Geo_mismatch_pct": 0.07,
+        "Abnormal_peak_actions_pct": 0.44,
+        "Abnormal_peak_clicks_pct": 0.52
+      }
+    },
+    "expected_trajectory": {
+      "required_tools": [
+        "get_linked_accounts",
+        "get_publisher_summary",
+        "get_risk_scores"
+      ],
+      "step_6_triggers": {
+        "6A_attribution": false,
+        "6B_url_risk": false,
+        "6B1_semrush": false,
+        "6C_geo_mismatch": false,
+        "6D_login_ip": false,
+        "6E_login_email": false,
+        "6F_abnormal_peaks": true
+      }
+    },
+    "expected_report_assertions": {
+      "must_contain_entities": ["PulseClick Network", "5214800", "United States"],
+      "must_contain_fraud_signals": ["abnormal peak", "EWMA baseline", "volume surge"],
+      "must_contain_actions": ["request explanation of volume spike", "audit sub-IDs", "pause payouts pending verification"],
+      "overall_severity": "ELEVATED"
+    }
+  },
+  {
+    "eval_id": "EVAL-006-THRESHOLD-BOUNDARY-PRECISION",
+    "scenario_name": "Boundary Threshold Precision (No JIRA Ticket ID Provided)",
+    "description": "Tests mathematical edge-cases: Click_spamming_pct = 0.11 (>0.1, Trigger 6A), Geo_mismatch_pct = 0.49 (<=0.5, Do NOT Trigger 6C), High_risk_url_action_pct = 0.09 (<=0.1, Do NOT Trigger 6B). Input contains only publisher ID.",
+    "input": {
+      "user_prompt": "4910332",
+      "publisher_id": 4910332,
+      "jira_ticket_id": ""
+    },
+    "mock_context": {
+      "account_list": [4910332],
+      "primary_publisher": {
+        "publisher_id": 4910332,
+        "publisher_name": "Boundary Edge Media",
+        "country": "United Kingdom",
+        "primary_promo_method": "Email Marketing",
+        "account_creation_date": "2024-03-01",
+        "marketplace_status": "approved",
+        "lifetime_gtv": 31000.00,
+        "last_30_day_day_gtv": 7800.00,
+        "partnership_count": 14,
+        "is_qualified_to_pay": 1
+      },
+      "linked_publishers": [],
+      "top_programs": "HelloFresh, Gousto, Deliveroo",
+      "marketplace_history": [],
+      "compliance_jira_history": [],
+      "metrics_30d": {
+        "publisher_id": 4910332,
+        "avg_final_score": 58.0,
+        "critical_flagged_pct": 0.15,
+        "elevated_flagged_pct": 0.45,
+        "mild_flagged_pct": 0.40,
+        "Click_spamming_pct": 0.11,
+        "cs_clicks_pct": 0.05,
+        "cs_actions_pct": 0.03,
+        "avg_user_entropy": 0.22,
+        "Injected_click_pct": 0.00,
+        "long_cta_pct": 0.02,
+        "High_risk_login_ip_pct": 0.05,
+        "High_risk_login_email_pct": 0.01,
+        "High_risk_url_action_pct": 0.09,
+        "Geo_mismatch_pct": 0.49,
+        "Abnormal_peak_actions_pct": 0.04,
+        "Abnormal_peak_clicks_pct": 0.05
+      }
+    },
+    "expected_trajectory": {
+      "required_tools": [
+        "get_linked_accounts",
+        "get_publisher_summary",
+        "get_risk_scores"
+      ],
+      "step_6_triggers": {
+        "6A_attribution": true,
+        "6B_url_risk": false,
+        "6B1_semrush": false,
+        "6C_geo_mismatch": false,
+        "6D_login_ip": false,
+        "6E_login_email": false,
+        "6F_abnormal_peaks": false
+      }
+    },
+    "expected_report_assertions": {
+      "must_contain_entities": ["Boundary Edge Media", "4910332", "United Kingdom"],
+      "must_contain_fraud_signals": ["click spamming"],
+      "must_not_contain_fraud_signals": ["geo mismatch", "abnormal peaks"],
+      "overall_severity": "ELEVATED"
+    }
+  }
+]

@@ -1,0 +1,11 @@
+Async [Instructor Prompt 03]
+To handle high-concurrency, your architecture must be non-blocking.
+Async Refactor: Convert your agent class definitions and tool functions to utilize Python's async and await keywords.
+Scaling: Ensure that when the Root Agent calls a Sub-Agent, or a Sub-Agent calls a tool, the operation is awaited properly to prevent the execution loop from hanging.
+TIP: Make sure your calls to BQ also are async too, using the example.
+
+def run_query():
+query_job = client.query(query, job_config=job_config)
+return query_job.result()
+
+rows = await asyncio.to_thread(run_query)

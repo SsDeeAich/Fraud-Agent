@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Environment and Secrets
+.env
+.env.local
+
+# ADK Deployment Temporary Staging Directories & Local Session DBs
+.adk/
+compliance_agent_tmp*
+*_tmp*/
+
+# IDE and OS
+.DS_Store
+.idea/
+.vscode/

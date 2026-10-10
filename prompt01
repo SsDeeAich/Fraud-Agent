@@ -1,0 +1,6 @@
+Establish the directory structure and the root agent [Prompt01]
+Structure: Create a core directory named compliance_agent. Inside, initialize a root agent file (e.g., agent.py).
+The Root Agent: Use the ADK LlmAgent class to create a root_agent. This agent acts as the supervisor.
+Model Selection: Configure the root agent to use gemini-3.6-flash for reasoning and other core business logic tasks.
+Planning Logic: Enable "Thinking Mode" by implementing a BuiltInPlanner. This ensures the agent documents its "thoughts" before executing actions.
+Environment: Ensure your code loads variables from your .env file and initializes standard Python logging.

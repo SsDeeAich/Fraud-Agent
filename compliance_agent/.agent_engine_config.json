@@ -1,0 +1,17 @@
+{
+  "display_name": "Impact Fraud Detection Agent",
+  "description": "Root supervisor agent for compliance, fraud detection, and regulatory oversight with KV Cache and Agent Platform Memory Bank.",
+  "env_vars": {
+    "GOOGLE_GENAI_USE_VERTEXAI": "TRUE",
+    "GOOGLE_CLOUD_PROJECT": "customers-444618",
+    "GOOGLE_CLOUD_LOCATION": "us-central1",
+    "AGENT_ENV_PROJECT_ID": "customers-444618",
+    "AGENT_ENV_BIGQUERY_REGION": "us",
+    "BIGQUERY_DATASET_ID": "compliance_agent",
+    "OTEL_SERVICE_NAME": "compliance_agent",
+    "OTEL_TRACES_EXPORTER": "gcp_trace",
+    "CONTEXT_CACHE_TTL_SECONDS": "3600",
+    "CONTEXT_CACHE_MIN_TOKENS": "2048",
+    "CONTEXT_CACHE_INTERVALS": "1"
+  }
+}
